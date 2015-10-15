@@ -1,6 +1,7 @@
 # Dynabox
 A jQuery widget for dynamically editable comboboxes
 
+See more examples at: http://twistedape.altervista.org/dynabox/
 
 This plugin binds a combobox with a cached version of it which can be used to dynamically re-render its options.
 Each option is internally stored as an object which can make use of the following properties:
