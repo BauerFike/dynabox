@@ -1,5 +1,5 @@
 # Dynabox
-A javascript widget for dynamically editable comboboxes
+A jQuery widget for dynamically editable comboboxes
 
 
 This plugin binds a combobox with a cached version of it which can be used to dynamically re-render its options.
