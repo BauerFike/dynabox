@@ -64,8 +64,8 @@
         this.item = jQuery(item);
         this.init();
     }
-    function create_option(value, label, disabled, selected, cl, id) {
-        return "<option " + cl + " " + id + " value=" + value + " " + disabled + " " + selected + " >" + label + "</option>";
+    function create_option(value, label, disabled, selected, cl, id, index) {
+        return "<option data-dbox-index = '" + index + "' " + cl + " " + id + " value=" + value + " " + disabled + " " + selected + " >" + label + "</option>";
     }
     dynaBox.prototype = {
         init: function() {
@@ -169,11 +169,11 @@
                             id = 'id ="' + v.id + '"';
                         if (opts.linkedSel != undefined) {
                             if (v.link == undefined || v.link == "")
-                                el.append(create_option(v.value, v.label, dis, sel, cl, id));
+                                el.append(create_option(v.value, v.label, dis, sel, cl, id, v.index));
                             if (v.link == 1)
-                                selb.append(create_option(v.value, v.label, dis, sel, cl, id));
+                                selb.append(create_option(v.value, v.label, dis, sel, cl, id, v.index));
                         } else
-                            el.append(create_option(v.value, v.label, dis, sel, cl, id));
+                            el.append(create_option(v.value, v.label, dis, sel, cl, id, v.index));
                     }
                 }
             });
@@ -210,14 +210,14 @@
             var optionsToUpdate = [];
             var temp = [];
             thisObj = this;
-
-            if (selectors !== "all") {
+            thisObj.setSelectedOptions();
+            if (selectors === "all") {
+                temp = thisObj.options.values;
+            } else {
                 jQuery.each(selectors, function(property, values) {
                     optionsToUpdate.push(thisObj.findByProperty(property, values));
 
                 });
-
-
                 if (Object.keys(selectors).length > 1) {
                     for (i = 0; i < Object.keys(selectors).length; i++) {
                         if (optionsToUpdate[i + 1] != undefined) {
@@ -230,18 +230,28 @@
                 } else {
                     temp = optionsToUpdate[0];
                 }
-            } else {
-                temp = thisObj.options.values;
-
             }
 
             jQuery.each(temp, function(k, opt) {
                 jQuery.each(newValues, function(property, value) {
-                    opt[property] = value;
+                    if(property!=="index")
+                        opt[property] = value;
                 });
             });
             if (render)
                 thisObj.setValues();
+        },
+        setSelectedOptions: function() {
+            thisObj = this;
+            el = this.item;
+            var selectedOpts = $(":selected", el);
+            jQuery.each(thisObj.options.values, function(k, v) {
+                v.selected = "";
+            });
+            jQuery.each(selectedOpts, function(k, v) {
+                opt = thisObj.findByProperty("index", $(v).data("dbox-index"));
+                opt[0].selected = 1;
+            });
         },
         linkSelects: function(select, btnObjA, btnObjB) {
             jQuery.extend(this.options, {linkedSel: jQuery(select), linkedBtnA: jQuery(btnObjA), linkedBtnB: jQuery(btnObjB)});
