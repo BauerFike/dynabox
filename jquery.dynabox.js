@@ -245,33 +245,31 @@
             thisObj = this;
             el = this.item;
             var selectedOpts = $(":selected", el);
+            if(this.options.linkedSel !== undefined){
+                selectedOpts = jQuery.merge(selectedOpts,$(":selected",this.options.linkedSel));
+            }
             jQuery.each(thisObj.options.values, function(k, v) {
                 v.selected = "";
             });
             jQuery.each(selectedOpts, function(k, v) {
                 opt = thisObj.findByProperty("index", $(v).data("dbox-index"));
-                opt[0].selected = 1;
+                if(opt[0]!== undefined)
+                    opt[0].selected = 1;
             });
         },
         linkSelects: function(select, btnObjA, btnObjB) {
             jQuery.extend(this.options, {linkedSel: jQuery(select), linkedBtnA: jQuery(btnObjA), linkedBtnB: jQuery(btnObjB)});
             el = this.item;
             values = this.options.values;
-            thisObj = this;
 
             var rightClick = (function() {
-                selValues = jQuery(select).val();
-                if (selValues != null) {
-                    this.updateOptions({value: selValues}, {link: ""});
-                }
+                    this.setSelectedOptions();
+                    this.updateOptions({"selected": 1}, {link: ""});
             }).bind(this);
 
             var leftClick = (function() {
-                selValues = this.item.val();
-                if (selValues != null) {
-
-                    this.updateOptions({value: selValues}, {link: 1});
-                }
+                    this.setSelectedOptions();
+                    this.updateOptions({"selected": 1}, {link: 1});
             }).bind(this);
 
             jQuery(btnObjA).bind("click", function() {
