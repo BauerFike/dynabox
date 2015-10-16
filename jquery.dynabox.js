@@ -3,9 +3,9 @@
  *  CREATED ON:   14-oct-2015
  *  AUTHOR:       Luca Costanzi (luca.costanzi@gmail.com)
  *  --------------------------
- *  DESCRIPTION: A javascript widget for dynamically editable comboboxes
+ *  DESCRIPTION: A javascript widget for dynamically editable dropdown lists
  *
- *  This plugin binds a combobox with a cached version of it which can be used to dynamically re-render its options. 
+ *  This plugin binds a dropdown with a cached version of it which can be used to dynamically re-render its options. 
  *  Each option is internally stored as an object which can make use of the following properties:
  *      label: (String)The text which goes between <option> tags.
  *      value: (String)The value of the <option>.
@@ -69,7 +69,7 @@
     }
     dynaBox.prototype = {
         init: function() {
-            this.setValues();
+            this.render();
         },
         showOptions: function() {
             console.log(this);
@@ -94,7 +94,7 @@
                 opts.values.push(newOption);
             });
             if (render == undefined || render == true)
-                this.setValues();
+                this.render();
         },
         remove: function(selectors, render) {
             var optionsToUpdate = [];
@@ -131,9 +131,9 @@
                 thisObj.options.values = [];
             }
             if (render == undefined || render == true)
-                thisObj.setValues();
+                thisObj.render();
         },
-        setValues: function() {
+        render: function() {
             el = this.item;
             el.html("");
             opts = this.options;
@@ -183,7 +183,7 @@
                 render = true;
             jQuery.extend(this.options, {orderBy: field});
             if (render)
-                thisObj.setValues();
+                thisObj.render();
         },
         findByProperty: function(property, values) {
             var toReturn = [];
@@ -216,7 +216,6 @@
             } else {
                 jQuery.each(selectors, function(property, values) {
                     optionsToUpdate.push(thisObj.findByProperty(property, values));
-
                 });
                 if (Object.keys(selectors).length > 1) {
                     for (i = 0; i < Object.keys(selectors).length; i++) {
@@ -239,7 +238,7 @@
                 });
             });
             if (render)
-                thisObj.setValues();
+                thisObj.render();
         },
         setSelectedOptions: function() {
             thisObj = this;
