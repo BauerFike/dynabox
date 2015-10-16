@@ -1,9 +1,9 @@
 # Dynabox
-A jQuery widget for dynamically editable comboboxes
+A jQuery widget for dynamically editable dropdowns
 
 See more examples at: http://twistedape.altervista.org/dynabox/
 
-This plugin binds a combobox with a cached version of it which can be used to dynamically re-render its options.
+This plugin binds a dropdown with a cached version of it which can be used to dynamically re-render its options.
 Each option is internally stored as an object which can make use of the following properties:
 
 *   label: (String)The text which goes between `<option>` tags.
@@ -32,8 +32,8 @@ Which will be rendered as:
 
 ##Initialize
 
-###Pre-populated combobox
-Binding the plug-in to a combobox containing a list of options will authomatically cache them and generate the list of option objects for future use.
+###Pre-populated dropdown
+Binding the plug-in to a dropdown containing a list of options will authomatically cache them and generate the list of option objects for future use.
 
 ####Html
 
@@ -48,7 +48,7 @@ Binding the plug-in to a combobox containing a list of options will authomatical
     $("#theSelect").dynaBox();
     
     
-###Empty combobox
+###Empty dropdown
 It's also possible to initialize the plug-in by directly passing the list of options.
 
 ####Html
@@ -86,7 +86,7 @@ To set more fields on each option an array of objects can be passed instead.
 ##Options
 
 ###add
-Insert one or more new options to the cache. The combobox gets re-rendered immediately with the new options unless the render parameter is set to false (true by default).
+Insert one or more new options to the cache. The dropdown gets re-rendered immediately with the new options unless the render parameter is set to false (true by default).
 
 	$("#theSelect").dynaBox("add", options, [ render ]);
 	
@@ -99,12 +99,12 @@ Add 2 new options and set some properties:
 		]);
 
 ###linkSelects
-Joins the original combobox to a second one. Allows options to be moved from one combobox to the other one.
+Joins the original dropdown to a second one. Allows options to be moved from one dropdown to the other one.
 
-	$("#theSelect").dynaBox("linkSelects", combobox , button1 , button2 );
+	$("#theSelect").dynaBox("linkSelects", dropdown , button1 , button2 );
 	
 ####Code examples:
-Link the original "#theSelect" to a second element "#theSelect1". Enable button "#btnLinkR" to move the selected options from the first to the second combobox when clicked. "#btnLinkL" is enabled to move them back.
+Link the original "#theSelect" to a second element "#theSelect1". Enable button "#btnLinkR" to move the selected options from the first to the second dropdown when clicked. "#btnLinkL" is enabled to move them back.
 
 #####HTML
 	<div id="div1">
@@ -121,9 +121,9 @@ Link the original "#theSelect" to a second element "#theSelect1". Enable button 
 	$("#theSelect").dynaBox("linkSelects", "#theSelect1", "#btnLinkR", "#btnLinkL");
 	
 	
-An option can be moved from a combobox to the other by changing its "link" property. If "link" is equal to an empty string the option will be rendered on the first combobox, while if it's equal to "linked", it will be showed on the second.
+An option can be moved from a dropdown to the other by changing its "link" property. If "link" is equal to an empty string the option will be rendered on the first dropdown, while if it's equal to "linked", it will be showed on the second.
 
-Move the option with label "html3" to the second combobox:
+Move the option with label "html3" to the second dropdown:
 
 	$("#theSelect").dynaBox("updateOptions",{"label":"html3"},{"link":"linked"});
 	
@@ -133,7 +133,7 @@ Move it back to the original one:
 
 
 ###orderBy
-Order the options by one of its properties. The combobox gets re-rendered immediately with the desired order unless render is set to false (true by default).
+Order the options by one of its properties. The dropdown gets re-rendered immediately with the desired order unless render is set to false (true by default).
 
 Note: the options will keep to be sorted by the given option even after new renderings (ie: even after adding new values).
 
@@ -146,7 +146,7 @@ Order the options by label:
 
 
 ###updateOptions
-Update a property of one or more options. The combobox gets re-rendered immediately with the given properties unless render is set to false (true by default).
+Update a property of one or more options. The dropdown gets re-rendered immediately with the given properties unless render is set to false (true by default).
 
 	$("#theSelect").dynaBox("updateOptions", selector ,  properties , [ render ]);
 
@@ -168,7 +168,7 @@ Enable every option but don't render the changes immediately:
 	$("#theSelect").dynaBox("updateOptions","all",{"disabled":0} , false );
 
 ###remove
-Remove one or more options from the cache. The html combobox gets re-rendered immediately without the desired options unless the "render" property is set to false (true by default).
+Remove one or more options from the cache. The html dropdown gets re-rendered immediately without the desired options unless the "render" property is set to false (true by default).
 
 	$("#theSelect").dynaBox("remove", selector, [ render ]);
 	
