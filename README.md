@@ -176,3 +176,8 @@ Remove one or more options from the cache. The html dropdown gets re-rendered im
 Remove the options with class "removeMe".
 
 	$("#theSelect").dynaBox("remove",{"classHtml":"removeMe"});
+	
+###render
+Renders the cache.
+
+	$("theSelect").dynaBox("render");
