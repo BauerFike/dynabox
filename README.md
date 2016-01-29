@@ -8,6 +8,7 @@ Each option is internally stored as an object which can make use of the followin
 
 *   label: (String)The text which goes between `<option>` tags.
 *   value: (String)The value of the `<option>`.
+*   group: (String)The <optgroup> where this option should be added.
 *   classHtml: (String)The html class value.
 *   idHtml: (String)The html id value.
 *   disabled: (Boolean)1 to disable the `<option>`.
