@@ -1,22 +1,23 @@
-/* 
+/*
  *  FILE NAME:    dynaBox.js
  *  CREATED ON:   14-oct-2015
  *  AUTHOR:       Luca Costanzi (luca.costanzi@gmail.com)
  *  --------------------------
  *  DESCRIPTION: A javascript widget for dynamically editable dropdown lists
  *
- *  This plugin binds a dropdown with a cached version of it which can be used to dynamically re-render its options. 
+ *  This plugin binds a dropdown with a cached version of it which can be used to dynamically re-render its options.
  *  Each option is internally stored as an object which can make use of the following properties:
  *      label: (String)The text which goes between <option> tags.
  *      value: (String)The value of the <option>.
+ *      group: (String)The <optgroup> where this option should be added.
  *      classHtml: (String)The html class value.
  *      idHtml: (String)The html id value.
  *      disabled: (Boolean)1 to disable the <option>.
  *      visible: (Boolean)Set to 0 to not render the <option>. (the option is kept in cache but not created as an html element).
  *      selected: (Boolean)Set to 1 to render this <option> as selected.
- *  
+ *
  *  VERSIONS:
- *  1.0	Original
+ *  1.1	Original
  */
 
 (function(jQuery) {
@@ -66,6 +67,9 @@
     }
     function create_option(value, label, disabled, selected, cl, id, index) {
         return "<option data-dbox-index = '" + index + "' " + cl + " " + id + " value=" + value + " " + disabled + " " + selected + " >" + label + "</option>";
+    }
+    function create_group(group) {
+        return "<optgroup label='" + group + "'></optgroup>";
     }
     dynaBox.prototype = {
         init: function() {
@@ -150,9 +154,10 @@
                 return 0;
             }).bind(this);
             this.options.values.sort(orderFunc);
+            var groups = [];
             jQuery.each(this.options.values, function(i, v) {
                 if (v.visible == undefined || v.visible !== 0) {
-                    if (v.value != undefined && v.value !== "") {
+                    if (v.value != undefined) {
                         if (v.label === undefined)
                             v.label = v.value;
                         dis = "";
@@ -172,8 +177,16 @@
                                 el.append(create_option(v.value, v.label, dis, sel, cl, id, v.index));
                             if (v.link == 1)
                                 selb.append(create_option(v.value, v.label, dis, sel, cl, id, v.index));
-                        } else
-                            el.append(create_option(v.value, v.label, dis, sel, cl, id, v.index));
+                        } else {
+                            if (v.group !== undefined) {
+                                if (groups[v.group] === undefined) {
+                                    groups[v.group] = $($.parseHTML(create_group(v.group)));
+                                    el.append(groups[v.group]);
+                                }
+                                groups[v.group].append(create_option(v.value, v.label, dis, sel, cl, id, v.index));
+                            } else
+                                el.append(create_option(v.value, v.label, dis, sel, cl, id, v.index));
+                        }
                     }
                 }
             });
@@ -183,7 +196,7 @@
                 render = true;
             jQuery.extend(this.options, {orderBy: field});
             if (render)
-                thisObj.render();
+                this.render();
         },
         findByProperty: function(property, values) {
             var toReturn = [];
@@ -233,7 +246,7 @@
 
             jQuery.each(temp, function(k, opt) {
                 jQuery.each(newValues, function(property, value) {
-                    if(property!=="index")
+                    if (property !== "index")
                         opt[property] = value;
                 });
             });
@@ -244,15 +257,15 @@
             thisObj = this;
             el = this.item;
             var selectedOpts = $(":selected", el);
-            if(this.options.linkedSel !== undefined){
-                selectedOpts = jQuery.merge(selectedOpts,$(":selected",this.options.linkedSel));
+            if (this.options.linkedSel !== undefined) {
+                selectedOpts = jQuery.merge(selectedOpts, $(":selected", this.options.linkedSel));
             }
             jQuery.each(thisObj.options.values, function(k, v) {
                 v.selected = "";
             });
             jQuery.each(selectedOpts, function(k, v) {
                 opt = thisObj.findByProperty("index", $(v).data("dbox-index"));
-                if(opt[0]!== undefined)
+                if (opt[0] !== undefined)
                     opt[0].selected = 1;
             });
         },
@@ -262,13 +275,13 @@
             values = this.options.values;
 
             var rightClick = (function() {
-                    this.setSelectedOptions();
-                    this.updateOptions({"selected": 1}, {link: ""});
+                this.setSelectedOptions();
+                this.updateOptions({"selected": 1}, {link: ""});
             }).bind(this);
 
             var leftClick = (function() {
-                    this.setSelectedOptions();
-                    this.updateOptions({"selected": 1}, {link: 1});
+                this.setSelectedOptions();
+                this.updateOptions({"selected": 1}, {link: 1});
             }).bind(this);
 
             jQuery(btnObjA).bind("click", function() {
