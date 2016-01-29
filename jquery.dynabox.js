@@ -178,7 +178,7 @@
                             if (v.link == 1)
                                 selb.append(create_option(v.value, v.label, dis, sel, cl, id, v.index));
                         } else {
-                            if (v.group !== undefined) {
+                            if (v.group !== undefined && v.group !== "") {
                                 if (groups[v.group] === undefined) {
                                     groups[v.group] = $($.parseHTML(create_group(v.group)));
                                     el.append(groups[v.group]);
